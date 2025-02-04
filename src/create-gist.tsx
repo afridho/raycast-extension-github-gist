@@ -1,7 +1,6 @@
 import { Action, ActionPanel, Form, Icon, showToast, Toast } from "@raycast/api";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { fetchItemInput } from "./util/input";
-import { ActionSettings } from "./components/action-settings";
 import { MutatePromise, useForm } from "@raycast/utils";
 import { withGitHubClient } from "./components/with-github-client";
 import { getGitHubClient } from "./api/oauth";
@@ -149,7 +148,6 @@ export function CreateGistForm(props: { gist?: Gist | undefined; gistMutate?: Mu
               }}
             />
           </ActionPanel.Section>
-          <ActionSettings command={false} />
         </ActionPanel>
       }
     >

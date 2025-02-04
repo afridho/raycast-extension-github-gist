@@ -1,12 +1,12 @@
-import { ActionPanel, Application, Color, Icon, List } from "@raycast/api";
+import { ActionPanel, Application, Icon, List } from "@raycast/api";
 import { useMemo, useState } from "react";
-import { formatGistContentDetail } from "./util/utils";
+import { formatGistContentDetail, getIconType } from "./util/utils";
 import { GistAction } from "./components/gist-action";
 import { ActionSettings } from "./components/action-settings";
-import { perPage, rememberTag, showDetail, defaultGistTag } from "./types/preferences";
+import { perPage, rememberTag, defaultGistTag } from "./types/preferences";
 import { useFrontmostApp } from "./hooks/useFrontmostApp";
 import { withGitHubClient } from "./components/with-github-client";
-import { useCachedPromise } from "@raycast/utils";
+import { useCachedPromise, useCachedState } from "@raycast/utils";
 import { getGitHubClient } from "./api/oauth";
 import { GithubGistTag, githubGistTags } from "./util/gist-utils";
 
@@ -14,6 +14,8 @@ function SearchGists() {
   const client = getGitHubClient();
   const [tag, setTag] = useState<GithubGistTag>(GithubGistTag.MY_GISTS);
   const [gistId, setGistId] = useState<string>("");
+  // Use useCachedState for showDetail with a persistent cache
+  const [showDetail, setShowDetail] = useCachedState<boolean>("pref-show-detail", false);
 
   const { data: frontmostAppData } = useFrontmostApp();
 
@@ -60,6 +62,11 @@ function SearchGists() {
     return gistContentData.toString();
   }, [gistContentData]);
 
+  // Toggle function for show detail
+  const toggleShowDetail = () => {
+    setShowDetail(!showDetail);
+  };
+
   return (
     <List
       isShowingDetail={showDetail}
@@ -102,19 +109,14 @@ function SearchGists() {
                     url: gistFileArray[gistFileIndex].raw_url,
                     gistId: gist.gist_id,
                   })}
+                  keywords={[gist.description]}
                   key={"gistFile" + gistIndex + gistFileIndex}
-                  icon={{ source: Icon.CodeBlock, tintColor: Color.SecondaryText }}
+                  icon={getIconType(gistFile)}
                   title={{
                     value: gistFile?.filename,
                     tooltip: `${gistFile?.filename}
 Size: ${gistFile.size}`,
                   }}
-                  accessories={[
-                    {
-                      text: gistFile.language == "null" ? "Binary" : gistFile.language,
-                      tooltip: gistFile.type,
-                    },
-                  ]}
                   detail={
                     <List.Item.Detail
                       isLoading={gistContentLoading}
@@ -131,7 +133,8 @@ Size: ${gistFile.size}`,
                         gistMutate={gistMutate}
                         frontmostApp={frontmostApp}
                       />
-                      <ActionSettings command={true} />
+
+                      <ActionSettings onDetail={toggleShowDetail} showDetail={showDetail} />
                     </ActionPanel>
                   }
                 />

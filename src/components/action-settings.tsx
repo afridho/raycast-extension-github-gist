@@ -1,22 +1,18 @@
-import { Action, ActionPanel, Icon, openCommandPreferences, openExtensionPreferences } from "@raycast/api";
+import { Action, ActionPanel, Icon } from "@raycast/api";
 
-export function ActionSettings(props: { command: boolean }) {
-  const { command } = props;
+type perfProps = {
+  showDetail: boolean;
+  onDetail: () => void;
+};
+
+export function ActionSettings({ showDetail, onDetail }: perfProps) {
   return (
-    <ActionPanel.Section>
-      {command && (
-        <Action
-          icon={Icon.Gear}
-          title={"Configure Command"}
-          shortcut={{ modifiers: ["shift", "cmd"], key: "," }}
-          onAction={openCommandPreferences}
-        />
-      )}
+    <ActionPanel.Section title="Settings">
       <Action
-        icon={Icon.Gear}
-        title={"Configure Extension"}
-        shortcut={{ modifiers: ["opt", "cmd"], key: "," }}
-        onAction={openExtensionPreferences}
+        title={showDetail ? "Hide Details" : "Show Details"}
+        onAction={onDetail}
+        icon={Icon.Eye}
+        shortcut={{ modifiers: ["cmd"], key: "d" }}
       />
     </ActionPanel.Section>
   );

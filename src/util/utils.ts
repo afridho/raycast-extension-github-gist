@@ -63,3 +63,34 @@ export const alertDialog = async (
   };
   await confirmAlert(options);
 };
+
+function getThemeByTime(): "dark" | "light" {
+  const currentTime = new Date();
+  const currentHour = currentTime.getHours();
+  const currentMinute = currentTime.getMinutes();
+
+  // Convert current time to minutes since midnight
+  const currentTimeInMinutes = currentHour * 60 + currentMinute;
+
+  // Convert boundary times to minutes
+  const darkStartTime = 17 * 60 + 30; // 17:30 = 1050 minutes
+  const darkEndTime = 6 * 60; // 06:00 = 360 minutes
+
+  // Check if current time is within dark theme hours
+  if (currentTimeInMinutes >= darkStartTime || currentTimeInMinutes < darkEndTime) {
+    return "dark";
+  } else {
+    return "light";
+  }
+}
+
+export const getIconType = (gistFile: GistItem) => {
+  const parent = "icons";
+  const fileExt = gistFile?.language.toLowerCase();
+  const theme = getThemeByTime();
+
+  return {
+    source: `${parent}/${fileExt}${theme === "dark" ? "_dark" : ""}.svg`,
+    fallback: `${parent}/anyType.svg`,
+  };
+};

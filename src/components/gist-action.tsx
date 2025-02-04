@@ -74,23 +74,7 @@ export function GistAction(props: {
                 </>
               );
             }
-            case GithubGistTag.ALL_GISTS: {
-              return (
-                <Action
-                  title={"Star Gist"}
-                  icon={Icon.Star}
-                  shortcut={{ modifiers: ["cmd"], key: "s" }}
-                  onAction={async () => {
-                    const response = await client.starGist(gist.gist_id);
-                    if (response.status == 204) {
-                      await showToast(Toast.Style.Success, "Gist Stared");
-                    } else {
-                      await showToast(Toast.Style.Failure, "Failed to Star Gist");
-                    }
-                  }}
-                />
-              );
-            }
+
             case GithubGistTag.STARRED: {
               return (
                 <Action

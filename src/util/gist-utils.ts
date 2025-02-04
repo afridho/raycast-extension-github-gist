@@ -23,13 +23,11 @@ export interface Gist {
 export enum GithubGistTag {
   MY_GISTS = "My Gists",
   STARRED = "Starred Gists",
-  ALL_GISTS = "Public Gists",
 }
 
 export const githubGistTags = [
   { title: GithubGistTag.MY_GISTS, value: GithubGistTag.MY_GISTS, icon: Icon.Person },
   { title: GithubGistTag.STARRED, value: GithubGistTag.STARRED, icon: Icon.Stars },
-  { title: GithubGistTag.ALL_GISTS, value: GithubGistTag.ALL_GISTS, icon: Icon.TwoPeople },
 ];
 
 export function validateGistFileName(files: GistFile[]) {

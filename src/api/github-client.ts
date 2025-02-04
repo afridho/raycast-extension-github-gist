@@ -13,9 +13,6 @@ export class GithubClient {
         case GithubGistTag.MY_GISTS: {
           return await octokit.request(`GET /gists`, { page: page, per_page: perPage });
         }
-        case GithubGistTag.ALL_GISTS: {
-          return await octokit.request(`GET /gists/public`, { page: page, per_page: perPage });
-        }
         case GithubGistTag.STARRED: {
           return await octokit.request(`GET /gists/starred`, { page: page, per_page: perPage });
         }
